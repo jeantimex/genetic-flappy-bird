@@ -7,9 +7,23 @@ export async function loadImage(src) {
   });
 }
 
-export function createCanvas(options) {
+export function createCanvas(options, canvasIdOrElement) {
   const { width, height } = options;
-  const canvas = document.createElement("canvas");
+
+  let canvas = null;
+
+  if (typeof canvasIdOrElement === "string") {
+    canvas = document.getElementById(canvasIdOrElement);
+  } else if (canvasIdOrElement instanceof Element) {
+    canvas = canvasIdOrElement;
+  } else {
+    canvas = document.createElement("canvas");
+  }
+
+  if (canvas && !canvas.isConnected) {
+    document.body.append(canvas);
+  }
+
   const devicePixelRatio = window.devicePixelRatio || 1;
   const context = canvas.getContext("2d");
 

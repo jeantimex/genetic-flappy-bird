@@ -54,11 +54,13 @@ class State {
   }
 
   setupCanvas(assets) {
-    const c = createCanvas({
-      width: assets.background.width,
-      height: assets.background.height,
-    });
-    document.body.append(c);
+    const c = createCanvas(
+      {
+        width: assets.background.width,
+        height: assets.background.height,
+      },
+      "canvas"
+    );
     return c;
   }
 }

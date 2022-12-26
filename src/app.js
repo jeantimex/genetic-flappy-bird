@@ -56,6 +56,21 @@ export class App {
     }
 
     image(context, ground, 0, gameSize.height - ground.height);
+
+    this.updateInfo();
+  }
+
+  updateInfo() {
+    const generationInfo = document.getElementById("generation");
+    generationInfo.textContent = `Current generation: ${this.ga.generation}`;
+
+    const aliveBirds = document.getElementById("aliveBirds");
+    aliveBirds.textContent = `Live birds: ${state.aliveBirds.length}`;
+
+    if (state.aliveBirds.length > 0) {
+      const score = document.getElementById("score");
+      score.textContent = `Score: ${state.aliveBirds[0].score}`;
+    }
   }
 
   loop() {
