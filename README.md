@@ -1,1 +1,1 @@
-# genetic-flappy-bird
+# Genetic Flappy Bird
