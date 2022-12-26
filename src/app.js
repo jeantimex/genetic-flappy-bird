@@ -52,7 +52,6 @@ export class App {
     }
 
     if (aliveBirds.length == 0) {
-      state.generation++;
       this.ga.createNextGeneration();
     }
 

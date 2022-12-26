@@ -2,6 +2,11 @@ import { random } from "./util";
 import state from "./state";
 
 export default class GeneticAlgorithm {
+  constructor() {
+    // Current generation number
+    this.generation = 1;
+  }
+
   resetGame() {
     state.frameCounter = 0;
     state.pipes = [];
@@ -12,6 +17,7 @@ export default class GeneticAlgorithm {
     this.normalizeFitness(state.allBirds);
     state.aliveBirds = this.generate(state.allBirds);
     state.allBirds = state.aliveBirds.slice();
+    this.generation++;
   }
 
   generate(oldBirds) {

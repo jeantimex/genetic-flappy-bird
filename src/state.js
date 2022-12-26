@@ -21,9 +21,6 @@ class State {
     this.pipes = [];
 
     this.frameCounter = 0;
-
-    // Current generation number
-    this.generation = 1;
   }
 
   async initialize() {
