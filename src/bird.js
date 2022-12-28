@@ -5,11 +5,10 @@ import { map, image } from "./util";
 export default class Bird {
   constructor(brain) {
     const { gameSize, assets } = state;
-    const { ground, bird } = assets;
+    const { bird } = assets;
 
-    this.actualHeight = gameSize.height - ground.height;
     this.x = 50;
-    this.y = this.actualHeight / 2;
+    this.y = gameSize.actualHeight / 2;
     this.width = bird.width;
     this.height = bird.height;
     this.gravity = 0.8;
@@ -67,13 +66,13 @@ export default class Bird {
       inputs[0] = map(closest.x, this.x, gameSize.width, 0, 1);
 
       // 2. top of the closest pipe
-      inputs[1] = map(closest.top, 0, this.actualHeight, 0, 1);
+      inputs[1] = map(closest.top, 0, gameSize.actualHeight, 0, 1);
 
       // 3. bottom of the closest pipe
-      inputs[2] = map(closest.bottom, 0, this.actualHeight, 0, 1);
+      inputs[2] = map(closest.bottom, 0, gameSize.actualHeight, 0, 1);
 
       // 4. bird's y position
-      inputs[3] = map(this.y, 0, this.actualHeight, 0, 1);
+      inputs[3] = map(this.y, 0, gameSize.actualHeight, 0, 1);
 
       // 5. bird's velocity
       inputs[4] = map(this.velocity, -12, 12, 0, 1);
@@ -91,8 +90,10 @@ export default class Bird {
   }
 
   bottomTopCollision() {
+    const { gameSize } = state;
+
     return (
-      this.y + this.height / 2 > this.actualHeight ||
+      this.y + this.height / 2 > gameSize.actualHeight ||
       this.y - this.hieght / 2 < 0
     );
   }

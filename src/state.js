@@ -3,21 +3,24 @@ import { loadImage, createCanvas } from "./util";
 class State {
   constructor() {
     this.assets = null;
-    this.canvas = null;
     this.context = null;
   }
 
   async initialize() {
     this.assets = await this.loadAssets();
-    this.canvas = this.setupCanvas(this.assets);
-    this.context = this.canvas.getContext("2d");
-    return this;
+
+    const canvas = this.setupCanvas(this.assets.background);
+    this.context = canvas.getContext("2d");
   }
 
   get gameSize() {
-    if (!this.assets) return { width: 0, height: 0 };
-    const { width, height } = this.assets.background;
-    return { width, height };
+    if (!this.assets) return { width: 0, height: 0, actualHeight: 0 };
+    const { background, ground } = this.assets;
+    return {
+      width: background.width,
+      height: background.height,
+      actualHeight: background.height - ground.height,
+    };
   }
 
   async loadAssets() {
@@ -30,11 +33,12 @@ class State {
     };
   }
 
-  setupCanvas(assets) {
+  setupCanvas(background) {
+    const { width, height } = background;
     const c = createCanvas(
       {
-        width: assets.background.width,
-        height: assets.background.height,
+        width,
+        height,
       },
       "canvas"
     );
