@@ -6,29 +6,35 @@ import state from "./state";
 export class App {
   async run() {
     await state.initialize();
+
+    this.frameCounter = 0;
+    // Array which holds all the pipes on the screen
+    this.pipes = [];
+    this.maxPassedPipesCount = -Infinity;
     this.ga = new GeneticAlgorithm();
     this.loop();
   }
 
   draw() {
-    const { context, assets, gameSize, pipes, aliveBirds } = state;
+    const { context, assets, gameSize } = state;
     const { background, ground } = assets;
+    const { aliveBirds } = this.ga;
 
     image(context, background, 0, 0);
 
-    for (let i = pipes.length - 1; i >= 0; i--) {
-      pipes[i].update();
-      if (pipes[i].checkOffScreen()) {
-        pipes.splice(i, 1);
+    for (let i = this.pipes.length - 1; i >= 0; i--) {
+      this.pipes[i].update();
+      if (this.pipes[i].checkOffScreen()) {
+        this.pipes.splice(i, 1);
       }
     }
 
     for (let i = aliveBirds.length - 1; i >= 0; i--) {
       let bird = aliveBirds[i];
-      bird.chooseAction(pipes);
-      bird.update(pipes);
-      for (let j = 0; j < pipes.length; j++) {
-        if (pipes[j].checkCollision(bird)) {
+      bird.chooseAction(this.pipes);
+      bird.update(this.pipes);
+      for (let j = 0; j < this.pipes.length; j++) {
+        if (this.pipes[j].checkCollision(bird)) {
           aliveBirds.splice(i, 1);
           break;
         }
@@ -38,14 +44,14 @@ export class App {
       }
     }
 
-    if (state.frameCounter % 50 === 0) {
-      pipes.push(new Pipe());
+    if (this.frameCounter % 50 === 0) {
+      this.pipes.push(new Pipe());
     }
 
-    state.frameCounter++;
+    this.frameCounter++;
 
-    for (let i = 0; i < pipes.length; i++) {
-      pipes[i].show();
+    for (let i = 0; i < this.pipes.length; i++) {
+      this.pipes[i].show();
     }
     for (let i = 0; i < aliveBirds.length; i++) {
       aliveBirds[i].show();
@@ -61,22 +67,25 @@ export class App {
   }
 
   updateInfo() {
+    const { generation, aliveBirds } = this.ga;
+
     const generationInfo = document.getElementById("generation");
-    generationInfo.textContent = `Current generation: ${this.ga.generation}`;
+    generationInfo.textContent = `Current generation: ${generation}`;
 
-    const aliveBirds = document.getElementById("aliveBirds");
-    aliveBirds.textContent = `Live birds: ${state.aliveBirds.length}`;
+    const aliveBirdsInfo = document.getElementById("aliveBirds");
+    aliveBirdsInfo.textContent = `Live birds: ${aliveBirds.length}`;
 
-    if (state.aliveBirds.length > 0) {
+    if (this.ga.aliveBirds.length > 0) {
       const passedPipes = document.getElementById("passedPipes");
       const bestPassedPipes = document.getElementById("bestPassedPipes");
-      const passedPipesCount = state.aliveBirds[0].passedPipes.size;
-      state.maxPassedPipesCount = Math.max(
-        state.maxPassedPipesCount,
+      const passedPipesCount = aliveBirds[0].passedPipes.size;
+
+      this.maxPassedPipesCount = Math.max(
+        this.maxPassedPipesCount,
         passedPipesCount
       );
       passedPipes.textContent = `Passed pipes: ${passedPipesCount}`;
-      bestPassedPipes.textContent = `Max passed pipes: ${state.maxPassedPipesCount}`;
+      bestPassedPipes.textContent = `Max passed pipes: ${this.maxPassedPipesCount}`;
     }
   }
 

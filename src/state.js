@@ -1,41 +1,16 @@
 import { loadImage, createCanvas } from "./util";
-import Bird from "./bird";
 
 class State {
   constructor() {
     this.assets = null;
-
     this.canvas = null;
     this.context = null;
-
-    // The number of birds in each population
-    this.totalPopulation = 300;
-
-    // Birds currently alived
-    this.aliveBirds = [];
-
-    // all the birds of the current generation
-    this.allBirds = [];
-
-    // Array which holds all the pipes on the screen
-    this.pipes = [];
-
-    this.frameCounter = 0;
-
-    this.maxPassedPipesCount = -Infinity;
   }
 
   async initialize() {
     this.assets = await this.loadAssets();
     this.canvas = this.setupCanvas(this.assets);
     this.context = this.canvas.getContext("2d");
-
-    for (let i = 0; i < this.totalPopulation; i++) {
-      let bird = new Bird();
-      this.aliveBirds[i] = bird;
-      this.allBirds[i] = bird;
-    }
-
     return this;
   }
 

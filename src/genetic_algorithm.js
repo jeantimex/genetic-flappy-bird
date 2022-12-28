@@ -1,10 +1,26 @@
 import { random } from "./util";
 import state from "./state";
+import Bird from "./bird";
 
 export default class GeneticAlgorithm {
   constructor() {
+    // The number of birds in each population
+    this.totalPopulation = 300;
+
+    // Birds currently alived
+    this.aliveBirds = [];
+
+    // all the birds of the current generation
+    this.allBirds = [];
+
     // Current generation number
     this.generation = 1;
+
+    for (let i = 0; i < this.totalPopulation; i++) {
+      let bird = new Bird();
+      this.aliveBirds[i] = bird;
+      this.allBirds[i] = bird;
+    }
   }
 
   resetGame() {
@@ -14,9 +30,9 @@ export default class GeneticAlgorithm {
 
   createNextGeneration() {
     this.resetGame();
-    this.normalizeFitness(state.allBirds);
-    state.aliveBirds = this.generate(state.allBirds);
-    state.allBirds = state.aliveBirds.slice();
+    this.normalizeFitness(this.allBirds);
+    this.aliveBirds = this.generate(this.allBirds);
+    this.allBirds = this.aliveBirds.slice();
     this.generation++;
   }
 
