@@ -1,8 +1,7 @@
 import { random } from "./util";
-import state from "./state";
 import Bird from "./bird";
 
-export default class GeneticAlgorithm {
+export default class BirdManager {
   constructor() {
     // The number of birds in each population
     this.totalPopulation = 300;

@@ -1,5 +1,5 @@
 import { image } from "./util";
-import GeneticAlgorithm from "./genetic_algorithm";
+import BirdManager from "./bird_manager";
 import state from "./state";
 import PipeManager from "./pipe_manager";
 
@@ -9,29 +9,22 @@ export class App {
 
     this.maxPassedPipesCount = -Infinity;
     this.pipeManager = new PipeManager();
-    this.ga = new GeneticAlgorithm();
+    this.birdManager = new BirdManager();
     this.loop();
   }
 
-  loop() {
-    requestAnimationFrame(() => {
-      this.update();
-      const pipes = this.pipeManager.update();
-      const birds = this.ga.update(pipes);
+  update() {
+    const pipes = this.pipeManager.update();
+    const birds = this.birdManager.update(pipes);
 
-      if (birds.length == 0) {
-        this.pipeManager.reset();
-        this.ga.createNextGeneration();
-      }
+    if (birds.length == 0) {
+      this.pipeManager.reset();
+      this.birdManager.createNextGeneration();
+    }
 
-      this.draw(pipes, birds);
-      this.updateInfo();
-
-      this.loop();
-    });
+    this.draw(pipes, birds);
+    this.updateInfo();
   }
-
-  update() {}
 
   draw(pipes, birds) {
     const { context, assets, gameSize } = state;
@@ -51,7 +44,7 @@ export class App {
   }
 
   updateInfo() {
-    const { generation, aliveBirds } = this.ga;
+    const { generation, aliveBirds } = this.birdManager;
 
     const generationInfo = document.getElementById("generation");
     generationInfo.textContent = `Current generation: ${generation}`;
@@ -59,7 +52,7 @@ export class App {
     const aliveBirdsInfo = document.getElementById("aliveBirds");
     aliveBirdsInfo.textContent = `Alive birds: ${aliveBirds.length}`;
 
-    if (this.ga.aliveBirds.length > 0) {
+    if (aliveBirds.length > 0) {
       const passedPipes = document.getElementById("passedPipes");
       const bestPassedPipes = document.getElementById("bestPassedPipes");
       const passedPipesCount = aliveBirds[0].passedPipes.size;
@@ -71,5 +64,12 @@ export class App {
       passedPipes.textContent = `Passed pipes: ${passedPipesCount}`;
       bestPassedPipes.textContent = `Max passed pipes: ${this.maxPassedPipesCount}`;
     }
+  }
+
+  loop() {
+    requestAnimationFrame(() => {
+      this.update();
+      this.loop();
+    });
   }
 }
