@@ -13,23 +13,41 @@ export class App {
     this.loop();
   }
 
-  draw() {
+  loop() {
+    requestAnimationFrame(() => {
+      this.update();
+      const pipes = this.pipeManager.update();
+      const birds = this.ga.update(pipes);
+
+      if (birds.length == 0) {
+        this.pipeManager.reset();
+        this.ga.createNextGeneration();
+      }
+
+      this.draw(pipes, birds);
+      this.updateInfo();
+
+      this.loop();
+    });
+  }
+
+  update() {}
+
+  draw(pipes, birds) {
     const { context, assets, gameSize } = state;
     const { background, ground } = assets;
 
     image(context, background, 0, 0);
 
-    const pipes = this.pipeManager.update();
-    this.ga.update(pipes);
+    for (let i = 0; i < pipes.length; i++) {
+      pipes[i].show();
+    }
 
-    if (this.ga.aliveBirds.length == 0) {
-      this.pipeManager.reset();
-      this.ga.createNextGeneration();
+    for (let i = 0; i < birds.length; i++) {
+      birds[i].show();
     }
 
     image(context, ground, 0, gameSize.height - ground.height);
-
-    this.updateInfo();
   }
 
   updateInfo() {
@@ -53,12 +71,5 @@ export class App {
       passedPipes.textContent = `Passed pipes: ${passedPipesCount}`;
       bestPassedPipes.textContent = `Max passed pipes: ${this.maxPassedPipesCount}`;
     }
-  }
-
-  loop() {
-    requestAnimationFrame(() => {
-      this.draw();
-      this.loop();
-    });
   }
 }

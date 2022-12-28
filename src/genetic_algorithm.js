@@ -97,8 +97,6 @@ export default class GeneticAlgorithm {
       }
     }
 
-    for (let i = 0; i < this.aliveBirds.length; i++) {
-      this.aliveBirds[i].show();
-    }
+    return this.aliveBirds;
   }
 }

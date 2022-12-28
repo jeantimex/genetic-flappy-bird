@@ -19,10 +19,6 @@ export default class PipeManager {
       this.pipes.push(new Pipe());
     }
 
-    for (let i = 0; i < this.pipes.length; i++) {
-      this.pipes[i].show();
-    }
-
     this.frameCounter++;
 
     return this.pipes;
