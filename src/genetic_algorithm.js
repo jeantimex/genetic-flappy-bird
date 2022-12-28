@@ -23,13 +23,7 @@ export default class GeneticAlgorithm {
     }
   }
 
-  resetGame() {
-    state.frameCounter = 0;
-    state.pipes = [];
-  }
-
   createNextGeneration() {
-    this.resetGame();
     this.normalizeFitness(this.allBirds);
     this.aliveBirds = this.generate(this.allBirds);
     this.allBirds = this.aliveBirds.slice();
@@ -85,5 +79,26 @@ export default class GeneticAlgorithm {
     // Make sure it's a copy!
     // (this includes mutation)
     return birds[index].copy();
+  }
+
+  update(pipes) {
+    for (let i = this.aliveBirds.length - 1; i >= 0; i--) {
+      let bird = this.aliveBirds[i];
+      bird.chooseAction(pipes);
+      bird.update(pipes);
+      for (let j = 0; j < pipes.length; j++) {
+        if (pipes[j].checkCollision(bird)) {
+          this.aliveBirds.splice(i, 1);
+          break;
+        }
+      }
+      if (bird.bottomTopCollision()) {
+        this.aliveBirds.splice(i, 1);
+      }
+    }
+
+    for (let i = 0; i < this.aliveBirds.length; i++) {
+      this.aliveBirds[i].show();
+    }
   }
 }
