@@ -19,6 +19,8 @@ export default class Bird {
     // How many frames the bird stays alive
     this.score = 0;
 
+    this.passedPipes = new Set();
+
     // The fitness of the bird
     this.fitness = 0;
 
@@ -95,10 +97,16 @@ export default class Bird {
     );
   }
 
-  update() {
+  update(pipes) {
     this.velocity += this.gravity;
     this.velocity *= 0.9;
     this.y += this.velocity;
     this.score++;
+
+    for (const pipe of pipes) {
+      if (pipe.hasPassed(this)) {
+        this.passedPipes.add(pipe);
+      }
+    }
   }
 }

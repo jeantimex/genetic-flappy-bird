@@ -26,7 +26,7 @@ export class App {
     for (let i = aliveBirds.length - 1; i >= 0; i--) {
       let bird = aliveBirds[i];
       bird.chooseAction(pipes);
-      bird.update();
+      bird.update(pipes);
       for (let j = 0; j < pipes.length; j++) {
         if (pipes[j].checkCollision(bird)) {
           aliveBirds.splice(i, 1);
@@ -68,8 +68,15 @@ export class App {
     aliveBirds.textContent = `Live birds: ${state.aliveBirds.length}`;
 
     if (state.aliveBirds.length > 0) {
-      const score = document.getElementById("score");
-      score.textContent = `Score: ${state.aliveBirds[0].score}`;
+      const passedPipes = document.getElementById("passedPipes");
+      const bestPassedPipes = document.getElementById("bestPassedPipes");
+      const passedPipesCount = state.aliveBirds[0].passedPipes.size;
+      state.maxPassedPipesCount = Math.max(
+        state.maxPassedPipesCount,
+        passedPipesCount
+      );
+      passedPipes.textContent = `Passed pipes: ${passedPipesCount}`;
+      bestPassedPipes.textContent = `Max passed pipes: ${state.maxPassedPipesCount}`;
     }
   }
 

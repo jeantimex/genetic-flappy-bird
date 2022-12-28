@@ -71,4 +71,8 @@ export default class Pipe {
     }
     return false;
   }
+
+  hasPassed(bird) {
+    return bird.x - bird.width / 2 > this.x + this.width;
+  }
 }

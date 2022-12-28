@@ -21,6 +21,8 @@ class State {
     this.pipes = [];
 
     this.frameCounter = 0;
+
+    this.maxPassedPipesCount = -Infinity;
   }
 
   async initialize() {
