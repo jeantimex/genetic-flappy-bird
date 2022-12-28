@@ -34,15 +34,14 @@ class State {
   }
 
   setupCanvas(background) {
-    const { width, height } = background;
-    const c = createCanvas(
+    const canvas = createCanvas(
       {
-        width,
-        height,
+        width: background.width,
+        height: background.height,
       },
       "canvas"
     );
-    return c;
+    return canvas;
   }
 }
 
