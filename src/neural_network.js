@@ -1,6 +1,5 @@
 import * as tf from "@tensorflow/tfjs";
-import GaussianRandom from "./gaussian_random";
-import { random } from "./util";
+import { GaussianRandom, random } from "./util";
 
 tf.setBackend("cpu");
 
